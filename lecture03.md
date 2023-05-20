@@ -65,12 +65,14 @@
 * APサーバーの名前：Puma
 * バージョン：5.6.5
 * APサーバーを終了させるとWebアプリケーションにはアクセスできなくなる
+![APサーバー停止後のアクセス状況](images/APPserver-stop.png)
 * Apサーバーを起動させるとWebアプリケーションにアクセスできるようになる
+![APサーバー起動後のアクセス状況](images/App-DB-active.png)
 
 ## DBサーバー
 * DBサーバーの名前：MySQL
 * バージョン：8.0.33
 * DBサーバーを終了させるとWebアプリケーションにはアクセスできなくなる
-
+![DBサーバー停止後のアクセス状況](images/DBserver-stop.png)
 ## Railsの構成管理ツール
 * Bundler
