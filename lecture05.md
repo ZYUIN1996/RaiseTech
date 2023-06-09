@@ -20,7 +20,7 @@
 ![S3](images/s3.png)
 
 ## 構成図
-![第５回drawio](images/第５回drawio.png)
+![Structure_lecture05](images/Structure_lecture05.png)
 ---
 
 # 所感
