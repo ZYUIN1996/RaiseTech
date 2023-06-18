@@ -58,7 +58,7 @@ AWS Management Consoleにサインインしたというeventtype。
 ### Railsアプリケーションが使えない状態
 ①ターゲットのヘルスチェック
 
-![TG-healthy](images/TG-healthy.png)
+![TG-unhealthy](images/TG-unhealthy.png)
 
 ②CloudWatchアラーム
 
