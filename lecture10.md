@@ -242,16 +242,11 @@ Resources:
             FromPort: 80
             IpProtocol: tcp
             ToPort: 80
-          - CidrIp: 0.0.0.0/0
+          - CidrIp: 192.168.240.170/0
             Description: from 0.0.0.0/0:22
             FromPort: 22
             IpProtocol: tcp
             ToPort: 22
-          - CidrIp: 172.31.0.0/20
-            Description: connection to RDS
-            FromPort: 3306
-            IpProtocol: tcp
-            ToPort: 3306
         VpcId: !ImportValue VPC0704-VPC1
 ```
 
@@ -270,7 +265,7 @@ Resources:
     Properties:
       GroupDescription: Security group for private
       SecurityGroupIngress:
-        - CidrIp: 172.31.0.0/20
+        - SourceSecurityGroupId: !Ref EC2SecurityGroup
           Description: connection to RDS
           FromPort: 3306
           IpProtocol: tcp
