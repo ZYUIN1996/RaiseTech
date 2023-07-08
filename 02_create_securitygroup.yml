@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+#------------------------------------------------------
+#  SecurityGroup(EC2Instance)
+#------------------------------------------------------
+  EC2SecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Security group for public
+        SecurityGroupEgress:
+          - CidrIp: 0.0.0.0/0
+            Description: Allow all outbound traffic by default
+            IpProtocol: "-1"
+        SecurityGroupIngress:
+          - CidrIp: 0.0.0.0/0
+            Description: from 0.0.0.0/0:80
+            FromPort: 80
+            IpProtocol: tcp
+            ToPort: 80
+          - CidrIp: 0.0.0.0/0
+            Description: from 0.0.0.0/0:22
+            FromPort: 22
+            IpProtocol: tcp
+            ToPort: 22
+          - CidrIp: 172.31.0.0/20
+            Description: connection to RDS
+            FromPort: 3306
+            IpProtocol: tcp
+            ToPort: 3306
+        VpcId: !ImportValue VPC0704-VPC1
+#------------------------------------------------------
+#  SecurityGroup(DBInstance)
+#------------------------------------------------------
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for private
+      SecurityGroupIngress:
+        - CidrIp: 172.31.0.0/20
+          Description: connection to RDS
+          FromPort: 3306
+          IpProtocol: tcp
+          ToPort: 3306
+      VpcId: !ImportValue VPC0704-VPC1
+#------------------------------------------------------
+#  SecurityGroup(ALB)
+#------------------------------------------------------
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: MyLoadBalancerSecurityGroup
+      GroupDescription: Security group for the ALB
+      VpcId: !ImportValue VPC0704-VPC1
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+#------------------------------------------------------
+#  別のスタックへOUTPUT
+#------------------------------------------------------
+Outputs:
+  EC2SecurityGroupOutput:
+    Value: !Ref EC2SecurityGroup
+    Export:
+      Name: SG0704-EC2SG
+  DBSecurityGroupOutput:
+    Value: !Ref DBSecurityGroup
+    Export:
+      Name: SG0704-DBSG
+  ALBSecurityGroupOutput:
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: SG0704-ALBSG

@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+#------------------------------------------------------
+#  DBMasterUsername、DBMasteruserpassword
+#------------------------------------------------------
+  DBMasterUsername:
+    Type: String
+    Description: Enter the master username for the database.
+    AllowedPattern: "^[a-zA-Z][a-zA-Z0-9]*$"
+    ConstraintDescription: The username must start with a letter and can only contain letters and numbers.
+  DBMasterPassword:
+    Type: String
+    Description: Enter the master password for the database.
+    AllowedPattern: "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$"
+    ConstraintDescription: The password must be at least 8 characters long and contain at least one letter and one number.
+Resources:
+#------------------------------------------------------
+#  KeyPair
+#------------------------------------------------------
+  NewKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: KeyPair0704
+#------------------------------------------------------
+#  EC2Instance
+#------------------------------------------------------
+  EC2Instance1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-08928044842b396f0
+      InstanceType: t2.micro
+      KeyName: !Ref NewKeyPair
+      SecurityGroupIds: 
+        -  !ImportValue SG0704-EC2SG
+      SubnetId: !ImportValue VPC0704-PublicSubnetCId
+#------------------------------------------------------
+#  DBSubnetGroup
+#------------------------------------------------------
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: DBSubnetGroup1
+      DBSubnetGroupDescription: Subnet group for RDS database
+      SubnetIds: 
+      -  !ImportValue VPC0704-PrivateSubnetCId
+      -  !ImportValue VPC0704-PrivateSubnetAId
+#------------------------------------------------------
+#  DBInstance
+#------------------------------------------------------
+  DBInstance1:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      VPCSecurityGroups: 
+      -  !ImportValue SG0704-DBSG
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      DBInstanceClass: db.t2.micro
+      AllocatedStorage: 10
+      Engine: MySQL
+      MasterUsername: !Ref DBMasterUsername
+      MasterUserPassword: !Ref DBMasterPassword
+#------------------------------------------------------
+#  ALB
+#------------------------------------------------------
+  ALB1:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: ALB1
+      Scheme: internet-facing
+      Type: application
+      Subnets: 
+        -  !ImportValue VPC0704-PublicSubnetCId
+        -  !ImportValue VPC0704-PublicSubnetAId
+      SecurityGroups: 
+        -  !ImportValue SG0704-DBSG
+#------------------------------------------------------
+#  TargetGroup
+#------------------------------------------------------
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      TargetType: instance
+      Targets:
+        -  Id: !Ref EC2Instance1
+      VpcId: !ImportValue VPC0704-VPC1
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      Matcher: 
+        HttpCode: 200,301
+#------------------------------------------------------
+#  HTTPListener
+#------------------------------------------------------
+  HTTPListener:
+      Type: AWS::ElasticLoadBalancingV2::Listener
+      Properties:
+        DefaultActions:
+          - Type: 'forward'
+            TargetGroupArn: !Ref TargetGroup
+        LoadBalancerArn: !Ref ALB1
+        Port: '80'
+        Protocol: 'HTTP'
+#------------------------------------------------------
+#  S3Bucket
+#------------------------------------------------------
+  S3Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: s3bucketraaisetech0704zyui
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
