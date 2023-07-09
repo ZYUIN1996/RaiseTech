@@ -242,7 +242,7 @@ Resources:
             FromPort: 80
             IpProtocol: tcp
             ToPort: 80
-          - CidrIp: 192.168.240.170/0
+          - CidrIp: 192.168.240.170/32
             Description: from 0.0.0.0/0:22
             FromPort: 22
             IpProtocol: tcp
@@ -252,6 +252,7 @@ Resources:
 
 * SecurityGroupEgress：アウトバウンドルールを宣言する。IpProtocolを”-1”とすることで、すべてのプロトコルの通信を許可する。
 * SecurityGroupIngress：インバウンドルールを宣言する。ポート番号3306は、RDSのDBエンジンがMySQLの場合のデフォルトのもの。
+* 192.168.240.170はローカルのPCのIPアドレス。/32とすることで単一のIPを表す。
 
 <br>
 
