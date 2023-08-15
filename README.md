@@ -35,6 +35,12 @@
 * ALBのアラームをSNSトピックによりメール通知
 <br>
 
+## lecture07.md
+
+* WSでのセキュリティ対策(WAF、SSL接続、ACM、Inspector、KMS、Secrets Manager、Shield)について学習
+* 講座から学んだこと、感想を記載
+<br>
+
 ## lecture10.md
 
 * CloudFormationでVPC、EC2、RDS、ALB、S3リソースを作成
