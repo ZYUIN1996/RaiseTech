@@ -75,6 +75,27 @@ Select number: 2
 
 * sample_spec.rbをサンプルのものに書き換える。ただし、Nginxを80番ポートでリッスンさせるため、ポート番号を80に変更。
 
+* テストコードは以下を使った。
+```
+require 'spec_helper'
+
+listen_port = 8080
+
+describe package('nginx') do
+  it { should be_installed }
+end
+
+describe port(listen_port) do
+  it { should be_listening }
+end
+
+describe command('curl http://127.0.0.1:#{listen_port}/_plugin/head/ -o /dev/null -w "%{http_code}\n" -s') do
+  its(:stdout) { should match /^200$/ }
+end
+```
+
+<br>
+
 * テストを実行して成功を確認した。
 
 ![serverspec_test](images/serverspec_test.png)
