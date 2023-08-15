@@ -38,4 +38,23 @@
 ## lecture10.md
 
 * CloudFormationでVPC、EC2、RDS、ALB、S3リソースを作成
+<br>
 
+## lecture11.md
+
+* ServerspecによるEC2インスタンスのテスト
+<br>
+
+## lecture12.md
+
+* CircleCIコンフィグのGitHubリポジトリへの組み込み
+<br>
+
+## lecture13.md
+
+* CircleCIにServerSpecとAnsibleの処理を追加してRailsアプリケーションの自動デプロイを実現
+<br>
+
+## lecture14.md
+
+* 自動化した環境のAWS構成図および自動化処理がわかる図を作成
