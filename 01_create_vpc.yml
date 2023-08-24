@@ -1,5 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
+#------------------------------------------------------
+#  AvalabilityZone
+#------------------------------------------------------
   AvailabilityZoneA:
     Type: String
     Default: ap-northeast-1a
