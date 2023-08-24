@@ -13,6 +13,7 @@ Parameters:
     Description: Enter the master password for the database.
     AllowedPattern: "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$"
     ConstraintDescription: The password must be at least 8 characters long and contain at least one letter and one number.
+    NoEcho: True
 Resources:
 #------------------------------------------------------
 #  KeyPair
