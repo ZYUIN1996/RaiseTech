@@ -23,10 +23,7 @@ jobs:
       - run:
           name: run cfn-lint
           command: |
-            cfn-lint -i W3002 -t 01_create_vpc.yml
-            cfn-lint -i W3002 -t 02_create_securitygroup.yml
-            cfn-lint -i W3002 -t 03_create_instance.yml
-workflows:
+            cfn-lint -i W3002 -t cloudformation/*.yml
   raisetech:
     jobs:
       - cfn-lint
@@ -144,6 +141,7 @@ Resources:
 
 2. DBのMasterpasswordのNoEchoをTrueにした。
 
+
 【修正後】
 ```
 Parameters:
@@ -168,4 +166,5 @@ Parameters:
 ### テストの成功を確認
 
 ![run_cfn-lint](images/run_cfn-lint.png)
-       
+ 
+ 
