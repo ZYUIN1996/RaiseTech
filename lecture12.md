@@ -141,6 +141,7 @@ Resources:
 
 2. DBのMasterpasswordのNoEchoをTrueにした。
 
+
 【修正後】
 ```
 Parameters:
@@ -165,4 +166,4 @@ Parameters:
 ### テストの成功を確認
 
 ![run_cfn-lint](images/run_cfn-lint.png)
-       
+ 
