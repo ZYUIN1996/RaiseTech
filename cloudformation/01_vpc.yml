@@ -148,3 +148,4 @@ Outputs:
     Value: !Ref PrivateSubnetA
     Export:
       Name: VPC0704-PrivateSubnetAId
+
