@@ -23,10 +23,7 @@ jobs:
       - run:
           name: run cfn-lint
           command: |
-            cfn-lint -i W3002 -t 01_create_vpc.yml
-            cfn-lint -i W3002 -t 02_create_securitygroup.yml
-            cfn-lint -i W3002 -t 03_create_instance.yml
-workflows:
+            cfn-lint -i W3002 -t cloudformation/*.yml
   raisetech:
     jobs:
       - cfn-lint
