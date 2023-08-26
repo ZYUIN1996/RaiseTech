@@ -1,0 +1,152 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+#------------------------------------------------------
+#  AvalabilityZone
+#------------------------------------------------------
+  AvailabilityZoneA:
+    Type: String
+    Default: ap-northeast-1a
+    AllowedValues:
+      - ap-northeast-1a
+      - ap-northeast-1c
+  AvailabilityZoneC:
+    Type: String
+    Default: ap-northeast-1c
+    AllowedValues:
+      - ap-northeast-1a
+      - ap-northeast-1c
+Resources:
+#------------------------------------------------------
+#  VPC
+#------------------------------------------------------
+  VPC1:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.31.0.0/16
+#------------------------------------------------------
+#  Subnet
+#------------------------------------------------------
+  PublicSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZoneC
+      CidrBlock: 172.31.0.0/20
+      MapPublicIpOnLaunch: 'true'
+      VpcId: !Ref VPC1
+
+  PrivateSubnetC:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZoneC
+      CidrBlock: 172.31.48.128/25
+      MapPublicIpOnLaunch: 'false'
+      VpcId: !Ref VPC1   
+
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZoneA
+      CidrBlock: 172.31.32.0/20
+      MapPublicIpOnLaunch: 'true'
+      VpcId: !Ref VPC1
+
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZoneA
+      CidrBlock: 172.31.48.0/25
+      MapPublicIpOnLaunch: 'false'
+      VpcId: !Ref VPC1
+#------------------------------------------------------
+#  InternetGateway
+#------------------------------------------------------
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC1
+#------------------------------------------------------
+#  RouteTable(PublicSubnet)
+#------------------------------------------------------
+  RouteTableForPublicSubnetC:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC1
+  RouteForPublicSubnetC:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnetC
+      DestinationCidrBlock:  0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  AssocciateRouteTableForPublicSubnetC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetC
+      RouteTableId: !Ref RouteTableForPublicSubnetC
+
+  RouteTableForPublicSubnetA:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC1
+  RouteForPublicSubnetA:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnetA
+      DestinationCidrBlock:  0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  AssocciateRouteTableForPublicSubnetA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetA
+      RouteTableId: !Ref RouteTableForPublicSubnetA
+#------------------------------------------------------
+#  RouteTable(PrivateSubnet)
+#------------------------------------------------------
+  RouteTableForPrivateSubnetC:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC1
+  AssocciateRouteTableForPrivateSubnetC:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnetC
+      RouteTableId: !Ref RouteTableForPrivateSubnetC
+
+  RouteTableForPrivateSubnetA:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC1
+  AssocciateRouteTableForPrivateSubnetA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnetA
+      RouteTableId: !Ref RouteTableForPrivateSubnetA
+#------------------------------------------------------
+#  別のスタックへOUTPUT
+#------------------------------------------------------
+Outputs:
+  VPC1Output:
+    Value: !Ref VPC1
+    Export:
+      Name: VPC0704-VPC1
+  PublicSubnetCOutput:
+    Value: !Ref PublicSubnetC
+    Export:
+      Name: VPC0704-PublicSubnetCId
+  PrivateSubnetCOutput:
+    Value: !Ref PrivateSubnetC
+    Export:
+      Name: VPC0704-PrivateSubnetCId
+  PublicSubnetAOutput:
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: VPC0704-PublicSubnetAId
+  PrivateSubnetAOutput:
+    Value: !Ref PrivateSubnetA
+    Export:
+      Name: VPC0704-PrivateSubnetAId
+
+      
