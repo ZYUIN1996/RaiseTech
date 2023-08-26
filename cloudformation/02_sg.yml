@@ -67,5 +67,3 @@ Outputs:
     Value: !Ref ALBSecurityGroup
     Export:
       Name: SG0704-ALBSG
-      
-
