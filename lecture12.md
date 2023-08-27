@@ -165,5 +165,5 @@ Parameters:
 
 ### テストの成功を確認
 
-![run_cfn-lint](images/run_cfn-lint.png)
+![cfn-lint_OK](images/cfn-lint_OK.png)
  
